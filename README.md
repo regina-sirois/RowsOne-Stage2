@@ -145,7 +145,7 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 
 I try to keep a DRY and tidy repo. I have read Clean Code several times, and subscribe to the following principles:
 
-- small classes & methods, SRP whereever possible.
+- small classes & methods, SRP where ever possible.
 - short, precise, consistent variable names.
 - favor composition over inheritance.
 - favor value objects over primitives.
@@ -163,8 +163,8 @@ I try to keep a DRY and tidy repo. I have read Clean Code several times, and sub
 My years of experience have instilled in me the following test values:
 
 - Test as close to the code as meaningfully possible (eg follow testing pyramid).
-- Test a Service/component's functionality in isolation as much as possible. 
-- Test code should be DRY, and use parameterization whenever possible.
+- Test a service/component's functionality in isolation as much as possible. 
+- Test code should be short, DRY, and use parameterization whenever possible.
 - Avoid overtesting: scenarios should be meaningfully different and ideally only run against changed code.
 - Flakey tests are the devil. Don't mark - fix or delete them.
 - Tests should block releases. Failures should be triaged immediately. Defects should be elevated.
