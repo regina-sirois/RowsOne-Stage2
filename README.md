@@ -110,3 +110,20 @@ uv run pytest --lf                 # re-run last failures
 | `.cursor/skills/`          | Agent skills (e.g. `create-client`, `update-docs`) |
 
 
+## Framework description
+
+## Why Pytest
+
+I chose [pytest](https://docs.pytest.org/en/stable/) framework because it's simple and powerful. Test [fixtures](tests/employee_mgmt/conftest.py) are clean and easily scoped to test, module, or session. Adding workers is simple via pytest-xdist and useful packages like [faker](https://faker.readthedocs.io/en/master/) make generating test data a breeze (see [employee.py](framework/employee_mgmt/helpers/employee.py)).
+
+## Environment management
+
+The [Environment](framework/common/env/env.py) class helps to wrangle environment-specific data, like [URLs](framework/common/env/urls.py) and [Users](framework/common/env/users.py). For now, secrets are stored in a .env file locally - pulling them from a keyvault is an obvious potential future enhancement.
+
+## API strategy
+
+All code relating to API access lives in the framework. There is a standard [config](/framework/common/api/config.py) class and a potential [PassportOAuth](framework/common/api/passport.py) class - not needed for these tests but I wanted to explore the concept. 
+
+The client strategy starts with a cursor skill, [create-client](.cursor/skills/create-client/), which is expecting a path to a service directory with a swagger definition in it. This skill uses [openapi_python_client](https://pypi.org/project/openapi-python-client/0.6.0a4/) to generate [APIs](framework/employee_mgmt/generated/api/) and [models](framework/employee_mgmt/generated/models/) from the swagger documentation. I gather these generated inputs into a handwritten [client wrapper](framework/employee_mgmt/client.py) which manages all calls to a particular service. 
+
+This [client](framework/employee_mgmt/client.py) provides logging and automatic response validation for all calls to that service, keeping the tests lean and clean for validation of real functionality. If a response cannot be serialized into the expected response model, an error is thrown and we know an API contract may have changed - this saves the tedium of writing contract tests. A potential future enhancement is beefing up the cursor skill so that it automatically creates or updates the client wrapper as well.

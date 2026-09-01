@@ -7,9 +7,10 @@ cd "$REPO_ROOT"
 
 export PATH="${HOME}/.local/bin:${PATH}"
 
-run_python() {
+run_module() {
+  # Always invoke as `python -m <module>` so `uv run` spawns python, not the module name.
   if command -v uv >/dev/null 2>&1; then
-    uv run "$@"
+    uv run python -m "$@"
   elif [[ -x "${REPO_ROOT}/.venv/bin/python" ]]; then
     "${REPO_ROOT}/.venv/bin/python" -m "$@"
   else
@@ -46,10 +47,10 @@ if [[ ${#STAGED_PY_FILES[@]} -gt 0 ]]; then
   echo
 fi
 
-echo "pre-commit: running unit tests (tests/)..."
+echo "pre-commit: running unit tests (framework/unittest/)..."
 echo
 
-run_python unittest discover -s tests -t . -v
+run_module pytest framework/unittest/ -q
 
 echo
 echo "pre-commit: tests passed."
