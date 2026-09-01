@@ -34,15 +34,14 @@ from framework.employee_mgmt.generated.models import (
     LoginSuccessResponse,
     CreateEmployeeResponse201,
     GetCompaniesResponse200,
-    Field29274C00D46E2D6B2918Ec8D7Eb706EfResponse200, # This is not good, create defect
-    C13Eb606Ef7Aa3E15Ff1593217D3D973Response200, # This is not good, create defect
-    Field1F79D1Bd647Dac8D72Ac267A8F4242AbResponse200, # This is not good, create defect
+    Field29274C00D46E2D6B2918Ec8D7Eb706EfResponse200,  # This is not good, create defect
+    C13Eb606Ef7Aa3E15Ff1593217D3D973Response200,  # This is not good, create defect
+    Field1F79D1Bd647Dac8D72Ac267A8F4242AbResponse200,  # This is not good, create defect
     GetCompanySitesResponse200,
     GetEmployeesResponse200,
     GetEmployeeResponse200,
 )
 from framework.employee_mgmt.generated.types import UNSET, Unset
-
 
 
 def _opt(value: Any) -> Any | Unset:
@@ -96,7 +95,9 @@ class EmployeeMgmtApi:
         company_id: UUID | None = None,
         expect_error: bool = False,
     ) -> Any:
-        logging.info(f"Getting companies with items_per_page: {items_per_page}, company_id: {company_id}")
+        logging.info(
+            f"Getting companies with items_per_page: {items_per_page}, company_id: {company_id}"
+        )
         response = get_companies_api.sync(
             client=self._client,
             items_per_page=str(items_per_page),
@@ -122,7 +123,9 @@ class EmployeeMgmtApi:
             items_per_page=str(items_per_page),
             sort=_opt(sort),
         )
-        return self.validate_response(response, Field29274C00D46E2D6B2918Ec8D7Eb706EfResponse200, expect_error)
+        return self.validate_response(
+            response, Field29274C00D46E2D6B2918Ec8D7Eb706EfResponse200, expect_error
+        )
 
     def get_company_positions(
         self,
@@ -134,7 +137,9 @@ class EmployeeMgmtApi:
         sort: str = "name asc",
         expect_error: bool = False,
     ) -> Any:
-        logging.info(f"Getting company positions with company_id: {company_id}, company_department_id: {company_department_id}")
+        logging.info(
+            f"Getting company positions with company_id: {company_id}, company_department_id: {company_department_id}"
+        )
         response = get_company_positions_api.sync(
             company_id,
             client=self._client,
@@ -143,7 +148,9 @@ class EmployeeMgmtApi:
             page=page,
             sort=_opt(sort),
         )
-        return self.validate_response(response, C13Eb606Ef7Aa3E15Ff1593217D3D973Response200, expect_error)
+        return self.validate_response(
+            response, C13Eb606Ef7Aa3E15Ff1593217D3D973Response200, expect_error
+        )
 
     def get_company_sites(
         self,
@@ -173,7 +180,9 @@ class EmployeeMgmtApi:
         sort: str = "",
         expect_error: bool = False,
     ) -> Any:
-        logging.info(f"Getting employees with items_per_page: {items_per_page}, page: {page}, q: {q}, sort: {sort}")
+        logging.info(
+            f"Getting employees with items_per_page: {items_per_page}, page: {page}, q: {q}, sort: {sort}"
+        )
         response = get_employees_api.sync(
             client=self._client,
             items_per_page=str(items_per_page),
@@ -189,26 +198,33 @@ class EmployeeMgmtApi:
         return self.validate_response(response, GetEmployeeResponse200, expect_error)
 
     def create_employee(self, body: EmployeeCreateRequest, expect_error: bool = False) -> Any:
-        logging.info(f"Creating employee: {body.first_name} {body.last_name} with email: {body.primary_email}")
+        logging.info(
+            f"Creating employee: {body.first_name} {body.last_name} with email: {body.primary_email}"
+        )
         response = create_employee_api.sync(client=self._client, body=body)
         return self.validate_response(response, CreateEmployeeResponse201, expect_error)
 
     def update_employee_details(
-        self, 
-        employee_id: UUID,
-        body: EmployeeUpdateRequest, 
-        expect_error: bool = False
+        self, employee_id: UUID, body: EmployeeUpdateRequest, expect_error: bool = False
     ) -> Any:
-        logging.info(f"Updating employee: {body.first_name} {body.last_name} with email: {body.primary_email}")
+        logging.info(
+            f"Updating employee: {body.first_name} {body.last_name} with email: {body.primary_email}"
+        )
         response = update_employee_api.sync(employee_id, client=self._client, body=body)
         return self.validate_response(response, GetEmployeeResponse200, expect_error)
 
     def get_global_options(self, expect_error: bool = False) -> Any:
         logging.info("Getting global options")
         response = get_global_options_api.sync(client=self._client)
-        return self.validate_response(response, Field1F79D1Bd647Dac8D72Ac267A8F4242AbResponse200, expect_error)
+        return self.validate_response(
+            response, Field1F79D1Bd647Dac8D72Ac267A8F4242AbResponse200, expect_error
+        )
 
-    def validate_response(self, response: Any, expected_response_class: type[Any], expect_error: bool = False) -> Any:
+    def validate_response(
+        self, response: Any, expected_response_class: type[Any], expect_error: bool = False
+    ) -> Any:
         if not expect_error and not isinstance(response, expected_response_class):
-            raise Exception(f"Expected {expected_response_class.__name__}, got {response.__class__.__name__}")
+            raise Exception(
+                f"Expected {expected_response_class.__name__}, got {response.__class__.__name__}"
+            )
         return response
