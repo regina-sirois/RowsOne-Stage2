@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pre-commit hook: ruff format check + unit tests.
+# Pre-commit hook: ruff format + lint check, then unit tests.
 set -euo pipefail
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
@@ -18,13 +18,13 @@ run_module() {
   fi
 }
 
-run_ruff_format_check() {
+run_ruff() {
   if command -v uv >/dev/null 2>&1; then
-    uv run ruff format --check "$@"
+    uv run ruff "$@"
   elif [[ -x "${REPO_ROOT}/.venv/bin/ruff" ]]; then
-    "${REPO_ROOT}/.venv/bin/ruff" format --check "$@"
+    "${REPO_ROOT}/.venv/bin/ruff" "$@"
   else
-    ruff format --check "$@"
+    ruff "$@"
   fi
 }
 
@@ -41,9 +41,16 @@ done < <(
 if [[ ${#STAGED_PY_FILES[@]} -gt 0 ]]; then
   echo "pre-commit: checking ruff format on staged Python files..."
   echo
-  run_ruff_format_check "${STAGED_PY_FILES[@]}"
+  run_ruff format --check "${STAGED_PY_FILES[@]}"
   echo
   echo "pre-commit: ruff format check passed."
+  echo
+
+  echo "pre-commit: running ruff check on staged Python files..."
+  echo
+  run_ruff check "${STAGED_PY_FILES[@]}"
+  echo
+  echo "pre-commit: ruff check passed."
   echo
 fi
 

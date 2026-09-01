@@ -36,6 +36,14 @@ line-length = 100
 target-version = "py312"
 exclude = ["**/generated/**"]
 
+[tool.ruff.lint]
+# Classic Ruff defaults (avoid surprising rule expansions).
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# Generated API/model re-exports via star imports in service clients.
+"**/client.py" = ["F403", "F405"]
+
 [tool.pyright]
 venvPath = "."
 venv = ".venv"

@@ -1,4 +1,5 @@
 # Passport OAuth for the RowsOne platform, by environment
+# TODO: Not currently used, potentially remove.
 from __future__ import annotations
 
 import time
@@ -88,8 +89,7 @@ class PassportOAuth:
         except httpx.HTTPStatusError as e:
             if e.response.status_code in (400, 401):
                 raise ValueError(
-                    f"Passport token request failed ({self._grant} grant): "
-                    f"{e.response.text}"
+                    f"Passport token request failed ({self._grant} grant): {e.response.text}"
                 ) from e
             raise
 

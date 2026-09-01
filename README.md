@@ -110,20 +110,74 @@ uv run pytest --lf                 # re-run last failures
 | `.cursor/skills/`          | Agent skills (e.g. `create-client`, `update-docs`) |
 
 
+
 ## Framework description
 
-## Why Pytest
+This is a quick and dirty test framework based on [pytest](https://docs.pytest.org/en/stable/), that should give you an idea of how I work.
+
+### Why Python/Pytest
+
+[Python]([https://www.python.org/](https://www.python.org/)): speed, familiarity, readability. I won't say there are no drawbacks to using Python, but it's been a standard in the testing space for a reason. For example, it would be no sweat to build and publish the framework code in this project for use in other repos (I've done previously, for a [locust](https://locust.io/)-based repo.)
 
 I chose [pytest](https://docs.pytest.org/en/stable/) framework because it's simple and powerful. Test [fixtures](tests/employee_mgmt/conftest.py) are clean and easily scoped to test, module, or session. Adding workers is simple via pytest-xdist and useful packages like [faker](https://faker.readthedocs.io/en/master/) make generating test data a breeze (see [employee.py](framework/employee_mgmt/helpers/employee.py)).
 
-## Environment management
+### Environment management
 
 The [Environment](framework/common/env/env.py) class helps to wrangle environment-specific data, like [URLs](framework/common/env/urls.py) and [Users](framework/common/env/users.py). For now, secrets are stored in a .env file locally - pulling them from a keyvault is an obvious potential future enhancement.
 
-## API strategy
+### API access strategy
 
 All code relating to API access lives in the framework. There is a standard [config](/framework/common/api/config.py) class and a potential [PassportOAuth](framework/common/api/passport.py) class - not needed for these tests but I wanted to explore the concept. 
 
 The client strategy starts with a cursor skill, [create-client](.cursor/skills/create-client/), which is expecting a path to a service directory with a swagger definition in it. This skill uses [openapi_python_client](https://pypi.org/project/openapi-python-client/0.6.0a4/) to generate [APIs](framework/employee_mgmt/generated/api/) and [models](framework/employee_mgmt/generated/models/) from the swagger documentation. I gather these generated inputs into a handwritten [client wrapper](framework/employee_mgmt/client.py) which manages all calls to a particular service. 
 
-This [client](framework/employee_mgmt/client.py) provides logging and automatic response validation for all calls to that service, keeping the tests lean and clean for validation of real functionality. If a response cannot be serialized into the expected response model, an error is thrown and we know an API contract may have changed - this saves the tedium of writing contract tests. A potential future enhancement is beefing up the cursor skill so that it automatically creates or updates the client wrapper as well.
+This wrapper [client](framework/employee_mgmt/client.py) provides logging and automatic response validation for all calls to that service, keeping the tests lean and clean for validation of real functionality. If a response cannot be serialized into the expected response model, an error is thrown and we know an API contract may have changed - this saves the tedium of writing separate contract tests. A potential future enhancement is beefing up the cursor [skill](.cursor/skills/create-client/) so that it automatically creates or updates the client wrapper as well.
+
+## Tests description
+
+[Tests](tests/) live in a separate top-level directory. A top-level session-scoped [fixture](tests/conftest.py) provides the environment, which will automatically be available to all service subdirectories. In the service directory other [fixtures](tests/employee_mgmt/conftest.py) provide a User and the API client. Modules are flexibly named for the functionality being tested, eg: [test_auth.py](tests/employee_mgmt/test_auth.py). 
+
+# Soapbox stuff!
+
+![Soapbox](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOJjRk1un2aG_d7-Nr0p0MZPw3kHdBnZPxOd3X5a9yg&s=10)
+
+### Code Approach
+
+I try to keep a DRY and tidy repo. I have read Clean Code several times, and subscribe to the following principles:
+
+- small classes & methods, SRP whereever possible.
+- short, precise, consistent variable names.
+- favor composition over inheritance.
+- favor value objects over primitives.
+- prefer readable code to static comments or noise comments.
+- comment important context and unintuitive choices.
+- never leave behind commented-out or dead code.
+- avoid over-coupling, but keep related things close together.
+- liberal use of white-space for readability.
+- type-checkers, auto-formatters, linters FTW.
+
+
+
+### Test Philosophy
+
+My years of experience have instilled in me the following test values:
+
+- Test as close to the code as meaningfully possible (eg follow testing pyramid).
+- Test a Service/component's functionality in isolation as much as possible. 
+- Test code should be DRY, and use parameterization whenever possible.
+- Avoid overtesting: scenarios should be meaningfully different and ideally only run against changed code.
+- Flakey tests are the devil. Don't mark - fix or delete them.
+- Tests should block releases. Failures should be triaged immediately. Defects should be elevated.
+- Test data should be properly scoped, and deleted once the test is over whenever possible (unless ephemeral env).
+
+
+
+### Frozen Dessert Philosophy
+
+My years of experience being a human with senses has instilled in me the following dessert values:
+
+- Gelato > iced-cream > fro-yo > sherbet. It's simple: more creamy calories == better flavor
+- Whipped cream can be eaten on it's own, on a dessert, or on coffee. 
+- Adults can purchase whipped cream with or without permission.
+- Chocolate iced-cream is delicious but makes you hella thirsty for some reason, so take care.
+

@@ -14,17 +14,24 @@ from framework.employee_mgmt.generated.models.employee_create_request_phone_numb
 )
 
 _fake = Faker()
+real_phone_numbers = [
+    "+14185438090",
+    "+15875302271",
+    "+14047241937",
+    "+14433071473",
+    "+13294201792",
+    "+17702126011",
+]
 
 
 def _make_phone_numbers() -> list[EmployeeCreateRequestPhoneNumbersType0Item]:
-    count = random.randint(1, 3)
     return [
         EmployeeCreateRequestPhoneNumbersType0Item(
-            phone_number=_fake.phone_number(),
+            phone_number=random.choice(real_phone_numbers),
             type_=random.choice(list(EmployeeCreateRequestPhoneNumbersType0ItemType)),
             is_primary=index == 0,
         )
-        for index in range(count)
+        for index in range(2)
     ]
 
 
@@ -47,9 +54,7 @@ def make_employee_requests(number_to_make: int = 10) -> list[EmployeeCreateReque
             middle_name=_fake.first_name(),
             last_name=_fake.last_name(),
             preferred_name=random.choice([_fake.first_name(), None]),
-            preferred_language=random.choice(
-                list(EmployeeCreateRequestPreferredLanguage)
-            ),
+            preferred_language=random.choice(list(EmployeeCreateRequestPreferredLanguage)),
             prior_last_name=random.choice([_fake.last_name(), None]),
             ssn=_fake.ssn().replace("-", ""),
             primary_email=_fake.email(),

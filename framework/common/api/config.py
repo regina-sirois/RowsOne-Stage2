@@ -18,13 +18,11 @@ class ApiConfig:
         self.user = user
         if not self.user.client_id or not self.user.client_secret:
             self.headers = {
-                "Authorization": self._basic_auth_header(
-                    self.user.email, self.user.password
-                ),
+                "Authorization": self._basic_auth_header(self.user.email, self.user.password),
             }
         else:
             with PassportOAuth(self.user) as oauth:
-                token = oauth.get_token()
+                oauth.get_token()
                 self.headers = oauth.auth_header()
 
     @staticmethod
