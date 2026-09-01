@@ -1,0 +1,42 @@
+[project]
+name = "rowsone-stage2"
+version = "0.1.0"
+description = "2nd stage (technical) of an interview"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28",
+    "python-dotenv>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8",
+    "openapi-python-client>=0.24",
+    "pytest>=8.0",
+    "ruff>=0.8",
+    "faker>=40.37.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "framework/unittest"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = [
+    "smoke: quick sanity checks run on every commit",
+    "regression: full regression suite",
+    "slow: tests that take a long time; deselect with '-m \"not slow\"'",
+    "api: tests that hit live API endpoints",
+    "auth: authentication and token flow tests",
+    "employee_mgmt: run employee tests only",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["**/generated/**"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+pythonVersion = "3.12"
