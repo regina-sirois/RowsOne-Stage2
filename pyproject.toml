@@ -5,6 +5,7 @@ description = "2nd stage (technical) of an interview"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "attrs>=26.1.0",
     "httpx>=0.28",
     "python-dotenv>=1.0",
 ]
@@ -15,7 +16,8 @@ dev = [
     "openapi-python-client>=0.24",
     "pytest>=8.0",
     "ruff>=0.8",
-    "faker>=40.37.0"
+    "faker>=40.37.0",
+    "pytest-html>=4.2.0",
 ]
 
 [tool.pytest.ini_options]

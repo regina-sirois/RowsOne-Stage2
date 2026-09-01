@@ -74,8 +74,11 @@ These exercise the live (or configured) Employee Management API:
 uv run pytest tests/
 # or a subset:
 uv run pytest tests/employee_mgmt/ -v
+# or a marker:
+uv run pytest -m api
+# with a results report:
+uv run pytest --html=results/report.html
 ```
-
 
 
 ### Unit tests only
@@ -189,6 +192,6 @@ Each test a given module should target one aspect of the functionality to valida
 |:---|:---|
 |  **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
 |  **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
-|  **Important** | Adults can purchase whipped cream with or without permission. |
+|  **Bulletin** | Adults can purchase whipped cream with or without permission. |
 |  **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
 
