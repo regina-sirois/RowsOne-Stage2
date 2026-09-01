@@ -171,7 +171,13 @@ class EmployeeMgmtApi:
         logging.info(
             f"Creating employee: {body.first_name} {body.last_name} with email: {body.primary_email}"
         )
-        response = create_employee_api.sync(client=self._client, body=body)
+        detailed = create_employee_api.sync_detailed(client=self._client, body=body)
+        response = detailed.parsed
+        if not expect_error and response is None:
+            raise Exception(
+                f"create_employee failed with HTTP {detailed.status_code}: "
+                f"{detailed.content.decode() if detailed.content else 'empty response'}"
+            )
         return self._validate_response(response, CreateEmployeeResponse201, expect_error)
 
     def update_employee_details(

@@ -7,6 +7,7 @@ from framework.common.env.users import Users, User
 
 from framework.employee_mgmt.client import EmployeeMgmtApi
 from framework.employee_mgmt.helpers.employee import make_employee_requests
+from framework.employee_mgmt.models.company import Company
 
 __all__ = [
     "ApiConfig",
@@ -18,4 +19,5 @@ __all__ = [
     "PassportOAuth",
     "EmployeeMgmtApi",
     "make_employee_requests",
+    "Company",
 ]

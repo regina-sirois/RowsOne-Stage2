@@ -2,8 +2,8 @@
 import pytest
 import logging
 from typing import Generator, Any
-from framework import EmployeeMgmtApi, make_employee_requests
-from framework.employee_mgmt.generated.models import EmployeeCreateRequest
+from framework import EmployeeMgmtApi, make_employee_requests, Company
+from framework.employee_mgmt.generated.models import Employee
 
 NUMBER_OF_EMPLOYEES = 10
 
@@ -11,20 +11,67 @@ NUMBER_OF_EMPLOYEES = 10
 @pytest.fixture(scope="module")
 def created_employees(
     api_client: EmployeeMgmtApi,
-) -> Generator[list[EmployeeCreateRequest], Any, Any]:
+    companies: list[Company],
+) -> Generator[list[Employee], Any, Any]:
 
-    employee_requests = make_employee_requests(number_to_make=NUMBER_OF_EMPLOYEES)
-    created_employees = []
-
-    for request in employee_requests:
-        response = api_client.create_employee(request, expect_error=False)
-        created_employees.append(response.data)
-    logging.info(f"Created {len(created_employees)} employees")
-
+    employees_response = api_client.get_employees()
+    employees = employees_response.data.items
+    logging.info(f"Found {len(employees)} existing employees in the database")
+    if (
+        employees is None or len(employees) <= NUMBER_OF_EMPLOYEES
+    ):  # Don't create employees if we already have them.
+        created_employees = []
+        for company in companies:
+            employee_requests = make_employee_requests(company, number_to_make=NUMBER_OF_EMPLOYEES)
+            for request in employee_requests:
+                response = api_client.create_employee(request, expect_error=False)
+                created_employees.append(response.data)
+    else:
+        created_employees = employees
     yield created_employees
 
+    # TODO: Delete employees when API supports it.
 
+
+@pytest.mark.api
 @pytest.mark.employee_mgmt
-def test_get_employees(api_client: EmployeeMgmtApi, created_employees: list[EmployeeCreateRequest]):
+def test_get_employees_with_filters(api_client: EmployeeMgmtApi, created_employees: list[Employee]):
     employees_response = api_client.get_employees()
-    assert len(employees_response.data) >= NUMBER_OF_EMPLOYEES
+    employees = employees_response.data.items
+
+    assert len(employees) >= NUMBER_OF_EMPLOYEES, (
+        f"Expected {NUMBER_OF_EMPLOYEES} employees, got {len(employees)}"
+    )
+
+
+@pytest.mark.api
+@pytest.mark.employee_mgmt
+def test_get_employee_details_by_id(api_client: EmployeeMgmtApi, created_employees: list[Employee]):
+    for expected in created_employees:
+        employee_response = api_client.get_employee_details_by_id(expected.id)
+        received = employee_response.data
+
+        assert expected.id == received.id, f"Expected {expected.id}, got {received.id}"
+        assert expected.first_name == received.first_name, (
+            f"Expected {expected.first_name}, got {received.first_name}"
+        )
+        assert expected.last_name == received.last_name, (
+            f"Expected {expected.last_name}, got {received.last_name}"
+        )
+        assert expected.email == received.email, f"Expected {expected.email}, got {received.email}"
+
+
+@pytest.mark.api
+@pytest.mark.employee_mgmt
+def test_create_employee(api_client: EmployeeMgmtApi, companies: list[Company]):
+    for company in companies:
+        requested = make_employee_requests(company, number_to_make=1)[0]
+        employee_response = api_client.create_employee(requested)
+        received = employee_response.data
+
+        assert requested.first_name == received.first_name, (
+            f"Expected {requested.first_name}, got {received.first_name}"
+        )
+        assert requested.last_name == received.last_name, (
+            f"Expected {requested.last_name}, got {received.last_name}"
+        )

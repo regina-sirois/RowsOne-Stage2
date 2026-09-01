@@ -1,6 +1,5 @@
 import random
-from uuid import UUID
-
+from framework.employee_mgmt.models.company import Company
 from faker import Faker
 
 from framework.employee_mgmt.generated.models import (
@@ -35,7 +34,13 @@ def _make_phone_numbers() -> list[EmployeeCreateRequestPhoneNumbersType0Item]:
     ]
 
 
-def make_employee_requests(number_to_make: int = 10) -> list[EmployeeCreateRequest]:
+def make_employee_requests(
+    company: Company, number_to_make: int = 10
+) -> list[EmployeeCreateRequest]:
+    state = _fake.state_abbr()
+    # TODO: Remove this once the API is updated to support FM and MP, if ever.
+    if state in ["FM", "MP"]:
+        state = "CO"
     return [
         EmployeeCreateRequest(
             address=EmployeeCreateRequestAddress.from_dict(
@@ -43,13 +48,13 @@ def make_employee_requests(number_to_make: int = 10) -> list[EmployeeCreateReque
                     "address_line1": _fake.street_address(),
                     "address_line2": _fake.secondary_address(),
                     "city": _fake.city(),
-                    "state": _fake.state_abbr(),
+                    "state": state,
                     "zip": _fake.zipcode(),
                     "country": "USA",
                 }
             ),
-            company_id=UUID(_fake.uuid4()),
-            company_position_id=_fake.random_int(min=1, max=1000),
+            company_id=company.id,
+            company_position_id=random.choice(company.position_ids),
             first_name=_fake.first_name(),
             middle_name=_fake.first_name(),
             last_name=_fake.last_name(),
@@ -61,7 +66,7 @@ def make_employee_requests(number_to_make: int = 10) -> list[EmployeeCreateReque
             emails=list({_fake.email() for _ in range(random.randint(1, 3))}),
             job_title=random.choice([_fake.job(), None]),
             location_type_id=random.randint(1, 3),
-            company_site_ids=[_fake.random_int(min=1, max=100)],
+            company_site_ids=company.site_ids,
             phone_numbers=_make_phone_numbers(),
         )
         for _ in range(number_to_make)

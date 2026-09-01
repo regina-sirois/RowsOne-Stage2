@@ -247,7 +247,11 @@ class CompanyPositionResource:
         if isinstance(_id, Unset):
             id = UNSET
         else:
-            id = UUID(_id)
+            # TODO: This is modified from the generated code, potentially create defect.
+            if isinstance(_id, str):
+                id = UUID(_id)
+            else:
+                id = _id
 
         company_department_id = d.pop("company_department_id", UNSET)
 
