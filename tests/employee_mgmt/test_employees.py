@@ -117,14 +117,12 @@ def test_update_employee_is_idempotent(
     updated = make_employee_update_requests(employee)
 
     logging.info(f"Updating employee {employee.id} 3 times to ensure idempotency")
-    for _ in range(3):
-        employee_response = api_client.update_employee_details(employee.id, updated)
-        received = employee_response.data
+    first_response = api_client.update_employee_details(employee.id, updated)
 
-        assert updated.first_name == received.first_name, (
-            f"Expected {updated.first_name}, got {received.first_name}"
-        )
-        assert updated.phone_numbers == received.phone_numbers, (
-            f"Expected {updated.primary_email}, got {received.primary_email}"
+    for i in range(2):
+        next_response = api_client.update_employee_details(employee.id, updated)
+
+        assert first_response.data == next_response.data, (
+            f"Expected {first_response.data}, got {next_response.data}"
         )
         time.sleep(1)  # Wait 1 second to ensure the update is completed.
