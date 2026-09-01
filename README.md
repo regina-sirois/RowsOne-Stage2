@@ -142,6 +142,8 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 
 Each test a given module should target one aspect of the functionality to validate, for example, API filters, or negative-path inputs and the resulting error-codes. Parameterization is preferred. Test data is consciously scoped and cleaned up whenever possible so that downstream tests are not impacted by existing data. Logging should provide all data necessary for debugging pipeline failures. 
 
+Please reference this results [README.md](results/README.md) for more.
+
 # Soapbox stuff!
 
 ![Soapbox](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTOJjRk1un2aG_d7-Nr0p0MZPw3kHdBnZPxOd3X5a9yg&s=10)
