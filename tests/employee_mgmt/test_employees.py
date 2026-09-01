@@ -2,8 +2,15 @@
 import pytest
 import logging
 from typing import Generator, Any
-from framework import EmployeeMgmtApi, make_employee_requests, Company
-from framework.employee_mgmt.generated.models import Employee
+from framework import (
+    EmployeeMgmtApi,
+    make_employee_requests,
+    make_employee_update_requests,
+    Company,
+)
+from framework.employee_mgmt.generated.models import (
+    Employee,
+)
 
 NUMBER_OF_EMPLOYEES = 10
 
@@ -35,7 +42,7 @@ def created_employees(
 
 @pytest.mark.api
 @pytest.mark.employee_mgmt
-def test_get_employees_with_filters(api_client: EmployeeMgmtApi, created_employees: list[Employee]):
+def test_get_employees(api_client: EmployeeMgmtApi, created_employees: list[Employee]):
     employees_response = api_client.get_employees()
     employees = employees_response.data.items
 
@@ -74,4 +81,29 @@ def test_create_employee(api_client: EmployeeMgmtApi, companies: list[Company]):
         )
         assert requested.last_name == received.last_name, (
             f"Expected {requested.last_name}, got {received.last_name}"
+        )
+
+
+@pytest.mark.api
+@pytest.mark.employee_mgmt
+def test_update_employee(api_client: EmployeeMgmtApi, created_employees: list[Employee]):
+    for employee in created_employees:
+        updated = make_employee_update_requests(employee)
+        employee_response = api_client.update_employee_details(employee.id, updated)
+        received = employee_response.data
+
+        assert updated.first_name == received.first_name, (
+            f"Expected {updated.first_name}, got {received.first_name}"
+        )
+        assert updated.last_name == received.last_name, (
+            f"Expected {updated.last_name}, got {received.last_name}"
+        )
+        assert updated.primary_email == received.primary_email, (
+            f"Expected {updated.primary_email}, got {received.primary_email}"
+        )
+        assert updated.phone_numbers == received.phone_numbers, (
+            f"Expected {updated.phone_numbers}, got {received.phone_numbers}"
+        )
+        assert updated.address == received.address, (
+            f"Expected {updated.address}, got {received.address}"
         )

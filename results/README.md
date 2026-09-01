@@ -17,8 +17,7 @@ Swagger endpoints with names that should be fixed:
 | `c13eb606ef7aa3e15ff1593217d3d973`         | get_company_positions_api                 |
 | `field_1f79d1bd647dac8d72ac267a8f4242ab`   | get_global_options_api                    |
 
-In the swagger, it appears that these are "operation id"s on the endpoint. This issue had 
-a negative impact on some of the models as well.
+In the swagger, it appears that these are "operation id"s on the endpoint. This issue had a negative impact on some of the models as well. Possible skill enhancement, or openapi_python_client flag?
 
 
 ### Misc issues

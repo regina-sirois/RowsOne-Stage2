@@ -187,7 +187,7 @@ class EmployeeMgmtApi:
             f"Updating employee: {body.first_name} {body.last_name} with email: {body.primary_email}"
         )
         response = update_employee_api.sync(employee_id, client=self._client, body=body)
-        return self._validate_response(response, GetEmployeeResponse200, expect_error)
+        return self._validate_response(response, UpdateEmployeeResponse200, expect_error)
 
     def get_global_options(self, expect_error: bool = False) -> Any:
         logging.info("Getting global options")

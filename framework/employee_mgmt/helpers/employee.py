@@ -3,10 +3,14 @@ from framework.employee_mgmt.models.company import Company
 from faker import Faker
 
 from framework.employee_mgmt.generated.models import (
+    Employee,
     EmployeeCreateRequest,
     EmployeeCreateRequestAddress,
     EmployeeCreateRequestPhoneNumbersType0Item,
     EmployeeCreateRequestPreferredLanguage,
+    EmployeeUpdateRequest,
+    EmployeeUpdateRequestPreferredLanguage,
+    EmployeeUpdateRequestAddressType0,
 )
 from framework.employee_mgmt.generated.models.employee_create_request_phone_numbers_type_0_item_type import (
     EmployeeCreateRequestPhoneNumbersType0ItemType,
@@ -71,3 +75,29 @@ def make_employee_requests(
         )
         for _ in range(number_to_make)
     ]
+
+
+def make_employee_update_requests(
+    employee: Employee,
+) -> EmployeeUpdateRequest:
+
+    return EmployeeUpdateRequest(
+        first_name=employee.first_name,
+        middle_name=employee.middle_name,
+        last_name=employee.last_name,
+        preferred_name=employee.preferred_name,
+        preferred_language=EmployeeUpdateRequestPreferredLanguage.EN,
+        prior_last_name="Smith",
+        ssn=employee.ssn,
+        address=EmployeeUpdateRequestAddressType0.from_dict(
+            {
+                "address_line1": employee.address.address_line1 if employee.address else None,
+                "address_line2": employee.address.address_line2 if employee.address else None,
+                "city": employee.address.city if employee.address else None,
+                "state": employee.address.state if employee.address else None,
+                "zip": employee.address.zip_ if employee.address else None,
+            }
+        ),
+        primary_email=employee.primary_email,
+        phone_numbers=[],
+    )

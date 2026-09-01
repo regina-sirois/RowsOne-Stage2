@@ -6,7 +6,10 @@ from framework.common.env.env import Environment, get_environment
 from framework.common.env.users import Users, User
 
 from framework.employee_mgmt.client import EmployeeMgmtApi
-from framework.employee_mgmt.helpers.employee import make_employee_requests
+from framework.employee_mgmt.helpers.employee import (
+    make_employee_requests,
+    make_employee_update_requests,
+)
 from framework.employee_mgmt.models.company import Company
 
 __all__ = [
@@ -19,5 +22,6 @@ __all__ = [
     "PassportOAuth",
     "EmployeeMgmtApi",
     "make_employee_requests",
+    "make_employee_update_requests",
     "Company",
 ]

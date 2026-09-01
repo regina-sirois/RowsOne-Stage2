@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
+from typing import Any, Generator
 import pytest
 
 from framework.common.env.env import VALID_ENVS, Environment, get_environment
 
 
 @pytest.fixture(autouse=True)
-def clear_environment_cache() -> None:
+def clear_environment_cache() -> Generator[Any, Any, Any]:
     get_environment.cache_clear()
     yield
     get_environment.cache_clear()
