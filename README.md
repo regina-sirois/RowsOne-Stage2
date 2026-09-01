@@ -143,41 +143,50 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 
 ### Code Approach
 
-I try to keep a DRY and tidy repo. I have read Clean Code several times, and subscribe to the following principles:
+> [!NOTE]
+> I try to keep a DRY and tidy repo. I've read *Clean Code* several times — these principles are the short version.
 
-- small classes & methods, SRP where ever possible.
-- short, precise, consistent variable names.
-- favor composition over inheritance.
-- favor value objects over primitives.
-- prefer readable code to static comments or noise comments.
-- comment important context and unintuitive choices.
-- never leave behind commented-out or dead code.
-- avoid over-coupling, but keep related things close together.
-- liberal use of white-space for readability.
-- type-checkers, auto-formatters, linters FTW.
+| | |
+|:---|:---|
+| 🧩 **Small & focused** | Small classes & methods; SRP wherever possible. |
+| ✏️ **Naming** | Short, precise, consistent variable names. |
+| 🔗 **Composition over inheritance** | Favor building behavior from parts, not deep hierarchies. |
+| 📦 **Value objects** | Favor value objects over primitives. |
+| 📖 **Readable code** | Prefer self-explanatory code over static or noise comments. |
+| 💬 **Comments that earn their keep** | Comment important context and unintuitive choices. |
+| 🗑️ **No dead code** | Never leave behind commented-out or abandoned code. |
+| 🧭 **Coupling with intent** | Avoid over-coupling, but keep related things close together. |
+| ⬜ **White space** | Liberal use of white space for readability. |
+| 🤖 **Automate the boring stuff** | Type-checkers, auto-formatters, linters — FTW. |
 
-
+---
 
 ### Test Philosophy
 
-My years of experience have instilled in me the following test values:
+> [!IMPORTANT]
+> Years of experience, distilled into test values I actually live by.
 
-- Test as close to the code as meaningfully possible (eg follow testing pyramid).
-- Test a service/component's functionality in isolation as much as possible. 
-- Test code should be short, DRY, and use parameterization whenever possible.
-- Avoid overtesting: scenarios should be meaningfully different and ideally only run against changed code.
-- Flakey tests are the devil. Don't mark - fix or delete them.
-- Tests should block releases. Failures should be triaged immediately. Defects should be elevated.
-- Test data should be properly scoped, and deleted once the test is over whenever possible (unless ephemeral env).
+| | |
+|:---|:---|
+| 🔺 **Testing pyramid** | Test as close to the code as meaningfully possible. |
+| 🔒 **Isolation** | Test a service or component's functionality in isolation as much as possible. |
+| ♻️ **DRY test code** | Keep tests short; use parameterization whenever possible. |
+| 🎯 **Meaningful coverage** | Avoid overtesting — scenarios should be meaningfully different and ideally run only against changed code. |
+| 👹 **No flaky tests** | Flaky tests are the devil. Don't mark them — fix or delete them. |
+| 🚫 **Tests gate releases** | Failures get triaged immediately; defects get elevated. |
+| 🧹 **Scoped test data** | Properly scope test data and delete it when the test is over (unless the env is ephemeral). |
 
-
+---
 
 ### Frozen Dessert Philosophy
 
-My years of experience being a human with senses has instilled in me the following dessert values:
+> [!TIP]
+> Years of being a human with senses, distilled into dessert values I will defend in court.
 
-- Gelato > iced-cream > fro-yo > sherbet. It's simple: more creamy calories == better flavor
-- Whipped cream can be eaten on it's own, on a dessert, or on coffee. 
-- Adults can purchase whipped cream with or without permission.
-- Chocolate iced-cream is delicious but makes you hella thirsty for some reason, so take care.
+| | |
+|:---|:---|
+| 🍦 **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
+| 🍨 **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
+| 🛒 **Adulting** | Adults can purchase whipped cream with or without permission. |
+| 🍫 **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
 
