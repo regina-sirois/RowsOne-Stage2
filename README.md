@@ -117,25 +117,27 @@ This is a quick and dirty test framework based on [pytest](https://docs.pytest.o
 
 ### Why Python/Pytest
 
-[Python]([https://www.python.org/](https://www.python.org/)): speed, familiarity, readability. I won't say there are no drawbacks to using Python, but it's been a standard in the testing space for a reason. For example, it would be no sweat to build and publish the framework code in this project for use in other repos (I've done previously, for a [locust](https://locust.io/)-based repo.)
+[Python]([https://www.python.org/](https://www.python.org/)): speed, familiarity, readability. I won't say there are no drawbacks to using Python, but it's been a standard in the testing space for a reason. For example, it would be no sweat to build and publish the framework code in this project for use in other repos (I've done previously, for a [locust](https://locust.io/)-based performance test repo.)
 
-I chose [pytest](https://docs.pytest.org/en/stable/) framework because it's simple and powerful. Test [fixtures](tests/employee_mgmt/conftest.py) are clean and easily scoped to test, module, or session. Adding workers is simple via pytest-xdist and useful packages like [faker](https://faker.readthedocs.io/en/master/) make generating test data a breeze (see [employee.py](framework/employee_mgmt/helpers/employee.py)).
+I chose [pytest](https://docs.pytest.org/en/stable/) framework because it's simple and powerful. Test [fixtures](tests/employee_mgmt/conftest.py) are clean and easily scoped to test, module, or session. Adding workers is simple via [pytest-xdist](https://pypi.org/project/pytest-xdist/) and useful packages like [faker](https://faker.readthedocs.io/en/master/) make generating test data a breeze (see [employee.py](framework/employee_mgmt/helpers/employee.py)).
 
 ### Environment management
 
-The [Environment](framework/common/env/env.py) class helps to wrangle environment-specific data, like [URLs](framework/common/env/urls.py) and [Users](framework/common/env/users.py). For now, secrets are stored in a .env file locally - pulling them from a keyvault is an obvious potential future enhancement.
+The [Environment](framework/common/env/env.py) class helps to wrangle environment-specific data, like [URLs](framework/common/env/urls.py) and [Users](framework/common/env/users.py). For now, secrets are stored in an .env file locally - pulling them from a keyvault is an obvious potential future enhancement.
 
 ### API access strategy
 
-All code relating to API access lives in the framework. There is a standard [config](/framework/common/api/config.py) class and a potential [PassportOAuth](framework/common/api/passport.py) class - not needed for these tests but I wanted to explore the concept. 
+All code relating to API access lives in the framework. There is a standard [config](/framework/common/api/config.py) class and a potential [PassportOAuth](framework/common/api/passport.py) class (not needed for these tests but I wanted to explore the concept). 
 
-The client strategy starts with a cursor skill, [create-client](.cursor/skills/create-client/), which is expecting a path to a service directory with a swagger definition in it. This skill uses [openapi_python_client](https://pypi.org/project/openapi-python-client/0.6.0a4/) to generate [APIs](framework/employee_mgmt/generated/api/) and [models](framework/employee_mgmt/generated/models/) from the swagger documentation. I gather these generated inputs into a handwritten [client wrapper](framework/employee_mgmt/client.py) which manages all calls to a particular service. 
+The client strategy starts with a cursor skill, [create-client](.cursor/skills/create-client/), which is expecting a path to a service directory with a swagger definition in it. This skill uses [openapi_python_client](https://pypi.org/project/openapi-python-client/0.6.0a4/) to generate [APIs](framework/employee_mgmt/generated/api/) and [models](framework/employee_mgmt/generated/models/) from the swagger documentation, and handles some cleanup. I gather these generated inputs into a handwritten [client wrapper](framework/employee_mgmt/client.py) which manages all calls to a particular service. 
 
 This wrapper [client](framework/employee_mgmt/client.py) provides logging and automatic response validation for all calls to that service, keeping the tests lean and clean for validation of real functionality. If a response cannot be serialized into the expected response model, an error is thrown and we know an API contract may have changed - this saves the tedium of writing separate contract tests. A potential future enhancement is beefing up the cursor [skill](.cursor/skills/create-client/) so that it automatically creates or updates the client wrapper as well.
 
 ## Tests description
 
-[Tests](tests/) live in a separate top-level directory. A top-level session-scoped [fixture](tests/conftest.py) provides the environment, which will automatically be available to all service subdirectories. In the service directory other [fixtures](tests/employee_mgmt/conftest.py) provide a User and the API client. Modules are flexibly named for the functionality being tested, eg: [test_auth.py](tests/employee_mgmt/test_auth.py). 
+[Tests](tests/) live in a separate top-level directory. A top-level session-scoped [fixture](tests/conftest.py) provides the environment, which will automatically be available to all service subdirectories. In the service directory other [fixtures](tests/employee_mgmt/conftest.py) provide a User and the API client. Test modules are flexibly named for the functionality being tested, eg: [test_auth.py](tests/employee_mgmt/test_auth.py). 
+
+Each test a given module should target one aspect of the functionality to validate, for example, API filters, or negative-path inputs and the resulting error-codes. Parameterization is preferred. Test data is consciously scoped and cleaned up whenever possible so that downstream tests are not impacted by existing data. Logging should provide all data necessary for debugging pipeline failures. 
 
 # Soapbox stuff!
 
@@ -144,20 +146,20 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 ### Code Approach
 
 > [!NOTE]
-> I try to keep a DRY and tidy repo. I've read *Clean Code* several times — these principles are the short version.
+> I try to keep a DRY and tidy repo. I've read *Clean Code* several times — some principles I work to adhere to are:
 
 | | |
 |:---|:---|
-| 🧩 **Small & focused** | Small classes & methods; SRP wherever possible. |
-| ✏️ **Naming** | Short, precise, consistent variable names. |
-| 🔗 **Composition over inheritance** | Favor building behavior from parts, not deep hierarchies. |
-| 📦 **Value objects** | Favor value objects over primitives. |
-| 📖 **Readable code** | Prefer self-explanatory code over static or noise comments. |
-| 💬 **Comments that earn their keep** | Comment important context and unintuitive choices. |
-| 🗑️ **No dead code** | Never leave behind commented-out or abandoned code. |
-| 🧭 **Coupling with intent** | Avoid over-coupling, but keep related things close together. |
-| ⬜ **White space** | Liberal use of white space for readability. |
-| 🤖 **Automate the boring stuff** | Type-checkers, auto-formatters, linters — FTW. |
+|  **Small & focused** | Small classes & methods; SRP wherever possible. |
+|  **Naming** | Short, precise, consistent variable names. |
+|  **Composition over inheritance** | Favor building behavior from parts, not deep hierarchies. |
+|  **Value objects** | Favor value objects over primitives. |
+|  **Readable code** | Prefer self-explanatory code over static or noise comments. |
+|  **Comments that earn their keep** | Comment important context and unintuitive choices. |
+|  **No dead code** | Never leave behind commented-out or abandoned code. |
+|  **Coupling with intent** | Avoid over-coupling, but keep related things close together. |
+|  **White space** | Liberal use of white space for readability. |
+|  **Automate the boring stuff** | Type-checkers, auto-formatters, linters — FTW. |
 
 ---
 
@@ -168,13 +170,13 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 
 | | |
 |:---|:---|
-| 🔺 **Testing pyramid** | Test as close to the code as meaningfully possible. |
-| 🔒 **Isolation** | Test a service or component's functionality in isolation as much as possible. |
-| ♻️ **DRY test code** | Keep tests short; use parameterization whenever possible. |
-| 🎯 **Meaningful coverage** | Avoid overtesting — scenarios should be meaningfully different and ideally run only against changed code. |
-| 👹 **No flaky tests** | Flaky tests are the devil. Don't mark them — fix or delete them. |
-| 🚫 **Tests gate releases** | Failures get triaged immediately; defects get elevated. |
-| 🧹 **Scoped test data** | Properly scope test data and delete it when the test is over (unless the env is ephemeral). |
+|  **Testing pyramid** | Test as close to the code as meaningfully possible. |
+|  **Isolation** | Test a service or component's functionality in isolation as much as possible. |
+|  **DRY test code** | Keep tests short; use parameterization whenever possible. |
+|  **Meaningful coverage** | Avoid overtesting — scenarios should be meaningfully different and ideally run only against changed code. |
+|  **No flaky tests** | Flaky tests are the devil. Don't mark them — fix or delete them. |
+|  **Tests gate releases** | Failures get triaged immediately; defects get elevated. |
+|  **Scoped test data** | Properly scope test data and delete it when the test is over (unless the env is ephemeral). |
 
 ---
 
@@ -185,8 +187,8 @@ This wrapper [client](framework/employee_mgmt/client.py) provides logging and au
 
 | | |
 |:---|:---|
-| 🍦 **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
-| 🍨 **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
-| 🛒 **Adulting** | Adults can purchase whipped cream with or without permission. |
-| 🍫 **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
+|  **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
+|  **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
+|  **Adulting** | Adults can purchase whipped cream with or without permission. |
+|  **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
 
