@@ -60,7 +60,7 @@ I am not sure whether this is just a python swagger generation problem, or...not
 
 **Questions I have**
 
-1. In some cases, API values that look like they should be int are strings, for example:
+In some cases, API values that look like they should be int are strings, for example:
 
 ```json
 "pbj_code": {
@@ -73,6 +73,6 @@ I am not sure whether this is just a python swagger generation problem, or...not
 
 This seems suboptimal.
 
-1. It looks like there could be a significant collapse of models used. For example:
+It looks like there could be a significant collapse of models used. For example:
 
 EmployeeCreateRequestPreferredLanguage and EmployeeUpdateRequestPreferredLanguage are identical. Why not just have a PreferredLanguage Enum and be done with it? A separate model for each response code is also unusual - but I'm not very familiar with this system.
