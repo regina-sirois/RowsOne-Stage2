@@ -183,12 +183,12 @@ Each test a given module should target one aspect of the functionality to valida
 ### Frozen Dessert Philosophy
 
 > [!TIP]
-> Years of being a human with senses, distilled into dessert values I will defend in court.
+> Years of being a human with senses, distilled into dessert values I would take to court.
 
 | | |
 |:---|:---|
 |  **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
 |  **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
-|  **Adulting** | Adults can purchase whipped cream with or without permission. |
+|  **Important** | Adults can purchase whipped cream with or without permission. |
 |  **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
 
