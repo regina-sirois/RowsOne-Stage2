@@ -1,5 +1,17 @@
 # RowsOne-Stage2: Strategy for Employee API tests
 
+## Prioritization
+
+Coming into a new situation, I am of course conferring with the engineering manager on priorities. However, as a quality professional, I also have opinions in this space. I like to start with tricky, critical logic, or areas of an application that have surfaced the most defects. The things developers are worrying about when their code is pushed to prod.
+
+I prefer not to duplicate unit test coverage as much as possible, and I have been known to thin out integration tests that were adding no value. The focus is on ROI, given capacity is a limited thing. It is likely that you already know that the CRUD functionality works, but those are quick and easy and familiarize one with the API anyway, so it's not a bad place to begin. It surfaces questions like: where is an employee's gender and ethnicity set, as I do not see those in the employee POST or PUT requests?
+
+Authentication tests are also high value due to security being a primary concern, but I haven't often found defects there - especially in comparison with **Data Integrity**, which seems to be a thorny issue for any company managing an extensive dataset over time. Performance testing is also valuable in some contexts - for endpoints managing a high valume of calls or on applications updating and maintaining a significant amount of state. 
+
+For the **structure and order** of a test suite - it really depends on the application. However, my goal is always to keep everything clean and well-organized, easy to read and find, maintain a clear separation of test and framework code, and have documented [code/design standards](README.md#code-approach) enforced by linters & proper code reviews.
+
+Some observations I made while I was working with this API are documented [here](results/README.md). 
+
 ---
 
 ## Validation
