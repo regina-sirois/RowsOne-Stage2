@@ -84,7 +84,7 @@ uv run pytest --html=results/report.html
 
 ### Unit tests only
 
-These mock HTTP and cover framework building blocks (`ApiClient`, `ApiConfig`, `PassportOAuth`, etc.):
+These mock HTTP and cover framework building blocks (`Environment`, `ApiConfig`, `PassportOAuth`, etc.):
 
 ```bash
 uv run pytest framework/unittest/ -v
