@@ -86,11 +86,11 @@ API filtering fields and pagination settings (and boundaries) should also be val
 
 ---
 
-I enumerate some of my testing philsophy [here](README.md), near the bottom of the document. Essentially, I believe that analysis, separating concerns, and testing isolated components/services is paramount to effective quality assurance. True end-to-end tests should be few, and cover common user behavioral patterns - most of the tests should be closer in. Nightly regression is a bit of an anti-pattern. Tests should gate releases and test ONLY those releases, as much as possible. 
+I enumerate some of my testing philsophy [here](README.md#test-philosophy), near the bottom of the document. Essentially, I believe that analysis, separating concerns, and testing isolated components/services is paramount to effective quality assurance. True end-to-end tests should be few, and cover common user behavioral patterns - most of the tests should be closer in. Nightly regression is a bit of an anti-pattern. Tests should gate releases and test ONLY those releases, as much as possible. 
 
 Gating tests are a forcing function for reliable tests. But reliable tests are also written that way; they are pragmatic rather than hopeful.. for example, polling for a result vs. attempting to time one. There are valid use-cases for test retries - sh*t happens. Test data should be properly scoped and disambiguated so that collisions are extremely improbable. Tests should be short, and implement more or less probable scenarios, rather than outlandish or impossible ones. 
 
 
 ## Ice cream vs gelato
 
-See the bottom of the document [here](README.md)
+See [here](README.md#frozen-dessert-philosophy)
