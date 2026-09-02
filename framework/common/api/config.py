@@ -16,14 +16,15 @@ class ApiConfig:
         self.base_url = base_url
         self.timeout = timeout
         self.user = user
-        if not self.user.client_id or not self.user.client_secret:
-            self.headers = {
-                "Authorization": self._basic_auth_header(self.user.email, self.user.password),
-            }
-        else:
+        if self.user.client_id and self.user.client_secret:
             with PassportOAuth(self.user) as oauth:
                 oauth.get_token()
                 self.headers = oauth.auth_header()
+        else:
+            self.headers = {
+                "Authorization": self._basic_auth_header(self.user.email, self.user.password),
+            }
+
 
     @staticmethod
     def _basic_auth_header(username: str, password: str) -> str:
