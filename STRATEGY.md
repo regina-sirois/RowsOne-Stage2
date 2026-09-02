@@ -45,7 +45,7 @@ API filtering fields and pagination settings (and boundaries) should also be val
 > **Data integrity is often under-tested, but it's critical to application usability!**
 
 - Required fields are actually required - and successfully backfilled if made required.
-- Appropriate values are accepted (for example, the state abbreviations of MP (Northern Mariana Islands) and FM (Federated States of Micronesia) were rejected as invalid by the API. Are they?), and innappropriate values are rejected (such as perhaps john@gmail as an employee email, or a date_of_hire after an employees date_of_termination).
+- Appropriate values are accepted (for example, the state abbreviations of MP (Northern Mariana Islands) and FM (Federated States of Micronesia) were rejected as invalid by the API. Are they?), and inappropriate values are rejected (such as perhaps john@gmail as an employee email, or a date_of_hire after an employees date_of_termination).
 - Idempotent endpoints such as update_employee_details are actually idempotent.
 - The data makes sense, for example: an employee has a specific position at a specific company, I would expect to find that company in a get_companies API call, and for that position to perhaps have an "active" status. If a company claims 75 employees, I would expect 75 employees to be returned by get_employees, filtered on that company. Two phones numbers can not both be primary, etc.
 - Children of deleted parent objects are effectively handled (deleted or soft-deleted)
