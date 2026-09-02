@@ -1,61 +1,90 @@
 # RowsOne-Stage2: Strategy for Employee API tests
 
+---
 
+## Validation
 
-### Validation
+> **This is the meat of the testing exercise - a high priority target.**
 
-**I would expect this to encompass such tests as:**
 - CRUD behavior of the API works as expected.
+- Any logic triggered via the API or eventing is determined to behave as expected.
 - Eventing (if applicable) works as expected - events are sent and received, idempotency, retries, DLQing, etc.
 - Any timed behaviors (eg, a termination date passes, this causes a status to change...etc) are validated.
 - Application behaviors are consistent and predictable, and performance is acceptable (via performance testing).
 
+---
 
-### API responses
+## API responses  
 
-**API responses** will be serialized into the checked-in generated models by the sevice client wrapper, passively validating the contract. In the event of a serialization failure, a ValueError will be raised with an explicit description of the expected and received types, and the calling test will fail. 
+> **The following approach has been most expediant and efficient for me:**
 
-Assertion comparisons of expected and received field values will validate that the data populated in the object is appropriate. These comparisons should be exhaustive without being overly brittle (for example, it would be brittle to assert on full string error descriptions preseving capitalization. Less so, a case-normalized keyword in an error). 
+**API responses** will be serialized into the checked-in generated models by the sevice client wrapper, passively validating the contract. In the event of a serialization failure, a ValueError will be raised with an explicit description of the expected and received types, and the calling test will fail.
+
+Assertion comparisons of expected and received field values will validate that the data populated in the object is appropriate. These comparisons should be exhaustive without being overly brittle (for example, it would be brittle to assert on full string error descriptions preseving capitalization. Less so, finding a case-normalized keyword in an error).
 
 API filtering fields and pagination settings (and boundaries) should also be validated to ensure no unexpected returns. API should comply with REST standards.
 
+---
 
-### Data integrity
 
-**Data integrity validations include tests such as:**
+
+## Data integrity
+
+> **Data integrity validations include tests such as:**
+
 - Required fields are actually required - and successfully backfilled if made required.
-- Appropriate values are accepted (for example, the state abbreviations of MP (Northern Mariana Islands) and FM (Federated States of Micronesia) were rejected as invalid by the API. Are they?), and innappropriate values are rejected (such as perhaps john@gmail as an employee email, or a date_of_hire after an employees date_of_termination). 
+- Appropriate values are accepted (for example, the state abbreviations of MP (Northern Mariana Islands) and FM (Federated States of Micronesia) were rejected as invalid by the API. Are they?), and innappropriate values are rejected (such as perhaps john@gmail as an employee email, or a date_of_hire after an employees date_of_termination).
 - Idempotent endpoints such as update_employee_details are actually idempotent.
 - The data makes sense, for example: an employee has a specific position at a specific company, I would expect to find that company in a get_companies API call, and for that position to perhaps have an "active" status. If a company claims 75 employees, I would expect 75 employees to be returned by get_employees, filtered on that company. Two phones numbers can not both be primary, etc.
 - Children of deleted parent objects are effectively handled (deleted or soft-deleted)
 - Metadata associated with a response object is properly implemented (updated_at updates on writes, fields make sense)
-- Any potential state transitions are valid and make sense. 
+- Any potential state transitions are valid and make sense.
+
+---
 
 
-### Authorization
 
-**Authorization validations include tests such as:**
+## Authorization
+
+> **Authorization validations include tests such as:**
+
 - User permission validations: admin vs standard users, RBAC, etc, if applicable.
 - api/login claims to implement account lockout and status checks - we should validate that it does both of those things properly.
 - Requested scopes for any potential oauth tokens perform as expected, read can read but not write, write can read and write but potentially not delete, etc. Expired tokens no longer grant access. Invalid credentials cannot obtain tokens. (assuming eventual oauth).
 
-### Boundary conditions
+---
 
-**Boundary condition validations include tests such as:**
-- how many employees can a company have? And how few? Probably not -1...how about 30 million? 
+
+
+## Boundary conditions
+
+> **Boundary condition validations include tests such as:**
+
+- how many employees can a company have? And how few? Probably not -1...how about 30 million?
 - what date ranges are valid? Could an employee have a start date in 1931? Can they have a termination date two years from now?
 - how large do profile pictures get to be? How many total notes is possible? Can an employee have 100 companies? etc.
 
-### Error handling
+---
 
-**Error handling validations include tests/concerns such as:**
-- do malformed API requests generate 400 errors as expected? Does attempting to get an employee that doesn't exist generate a 404? 
-- do auth failures return the expected error codes (401, 403) in the correct situations? 
+
+
+## Error handling
+
+> **Error handling validations include tests/concerns such as:**
+
+- do malformed API requests generate 400 errors as expected? Does attempting to get an employee that doesn't exist generate a 404?
+- do auth failures return the expected error codes (401, 403) in the correct situations?
 - are there any unhandled exceptions (500's) in the course of testing/usage? Those should be investigated and handled.
-- How are failures logged out, and what about observability, alerts, etc? 
+- How are failures logged out, and what about observability, alerts, etc?
 - if there are any retries on failures, what are potential side-effects?
 
+---
+
+
+
 ## Test isolation and reliability
+
+---
 
 
 
