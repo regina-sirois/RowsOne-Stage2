@@ -125,4 +125,4 @@ def test_update_employee_is_idempotent(
         assert first_response.data == next_response.data, (
             f"Expected {first_response.data}, got {next_response.data}"
         )
-        time.sleep(1)  # Wait 1 second to ensure the update is completed.
+        time.sleep(1)  # Wait 1 second to not hammer the API.

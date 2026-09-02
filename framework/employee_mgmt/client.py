@@ -200,7 +200,7 @@ class EmployeeMgmtApi:
         self, response: Any, expected_response_class: type[Any], expect_error: bool = False
     ) -> Any:
         if not expect_error and not isinstance(response, expected_response_class):
-            raise Exception(
+            raise ValueError(
                 f"Expected {expected_response_class.__name__}, got {response.__class__.__name__}"
             )
         return response

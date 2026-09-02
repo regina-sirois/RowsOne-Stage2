@@ -81,6 +81,7 @@ uv run pytest --html=results/report.html
 ```
 
 
+
 ### Unit tests only
 
 These mock HTTP and cover framework building blocks (`ApiClient`, `ApiConfig`, `PassportOAuth`, etc.):
@@ -111,6 +112,7 @@ uv run pytest --lf                 # re-run last failures
 | `framework/unittest/`      | Fast, mocked unit tests for the framework          |
 | `tests/`                   | Integration / API verification tests               |
 | `.cursor/skills/`          | Agent skills (e.g. `create-client`, `update-docs`) |
+
 
 
 
@@ -153,47 +155,57 @@ Please reference this results [README.md](results/README.md) for more.
 > [!NOTE]
 > I try to keep a DRY and tidy repo. I've read *Clean Code* several times — some principles I work to adhere to are:
 
-| | |
-|:---|:---|
-|  **Small & focused** | Small classes & methods; SRP wherever possible. |
-|  **Naming** | Short, precise, consistent variable names. |
-|  **Composition over inheritance** | Favor building behavior from parts, not deep hierarchies. |
-|  **Value objects** | Favor value objects over primitives. |
-|  **Readable code** | Prefer self-explanatory code over static or noise comments. |
-|  **Comments that earn their keep** | Comment important context and unintuitive choices. |
-|  **No dead code** | Never leave behind commented-out or abandoned code. |
-|  **Coupling with intent** | Avoid over-coupling, but keep related things close together. |
-|  **White space** | Liberal use of white space for readability. |
-|  **Automate the boring stuff** | Type-checkers, auto-formatters, linters — FTW. |
+
+|                                   |                                                              |
+| --------------------------------- | ------------------------------------------------------------ |
+| **Small & focused**               | Small classes & methods; SRP wherever possible.              |
+| **Naming**                        | Short, precise, consistent variable names.                   |
+| **Composition over inheritance**  | Favor building behavior from parts, not deep hierarchies.    |
+| **Value objects**                 | Favor value objects over primitives.                         |
+| **Readable code**                 | Prefer self-explanatory code over static or noise comments.  |
+| **Comments that earn their keep** | Comment important context and unintuitive choices.           |
+| **No dead code**                  | Never leave behind commented-out or abandoned code.          |
+| **Coupling with intent**          | Avoid over-coupling, but keep related things close together. |
+| **White space**                   | Liberal use of white space for readability.                  |
+| **Automate the boring stuff**     | Type-checkers, auto-formatters, linters — FTW.               |
+
 
 ---
+
+
 
 ### Test Philosophy
 
 > [!IMPORTANT]
 > Years of experience, distilled into test values I actually live by.
 
-| | |
-|:---|:---|
-|  **Testing pyramid** | Test as close to the code as meaningfully possible. |
-|  **Isolation** | Test a service or component's functionality in isolation as much as possible. |
-|  **DRY test code** | Keep tests short; use parameterization whenever possible. |
-|  **Meaningful coverage** | Avoid overtesting — scenarios should be meaningfully different and ideally run only against changed code. |
-|  **No flaky tests** | Flaky tests are the devil. Don't mark them — fix or delete them. |
-|  **Tests gate releases** | Failures get triaged immediately; defects get elevated. |
-|  **Scoped test data** | Properly scope test data and delete it when the test is over (unless the env is ephemeral). |
+
+|                         |                                                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Testing pyramid**     | Test as close to the code as meaningfully possible.                                                       |
+| **Isolation**           | Test a service or component's functionality in isolation as much as possible.                             |
+| **DRY test code**       | Keep tests short; use parameterization whenever possible.                                                 |
+| **Meaningful coverage** | Avoid overtesting — scenarios should be meaningfully different and ideally run only against changed code. |
+| **No flaky tests**      | Flaky tests are the devil. Don't mark them — fix or delete them.                                          |
+| **Tests gate releases** | Failures get triaged immediately; defects get elevated.                                                   |
+| **Scoped test data**    | Properly scope test data and delete it when the test is over (unless the env is ephemeral).               |
+
 
 ---
+
+
 
 ### Frozen Dessert Philosophy
 
 > [!TIP]
 > Years of being a human with senses, distilled into dessert values I would take to court.
 
-| | |
-|:---|:---|
-|  **The hierarchy** | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor. |
-|  **Whipped cream** | Eaten on its own, on a dessert, or on coffee — all valid life choices. |
-|  **Bulletin** | Adults can purchase whipped cream with or without permission. |
-|  **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
+
+|                      |                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **The hierarchy**    | Gelato > ice cream > fro-yo > sherbet. More creamy calories == better flavor.       |
+| **Whipped cream**    | Eaten on its own, on a dessert, or on coffee — all valid life choices.              |
+| **Bulletin**         | Adults can purchase whipped cream with or without permission.                       |
+| **Chocolate caveat** | Chocolate ice cream is delicious but makes you hella thirsty — hydrate accordingly. |
+
 
