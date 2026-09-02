@@ -30,7 +30,7 @@ API filtering fields and pagination settings (and boundaries) should also be val
 
 ## Data integrity
 
-> **Data integrity validations include tests such as:**
+> **Data integrity is often under-tested, but it's critical to application usability!**
 
 - Required fields are actually required - and successfully backfilled if made required.
 - Appropriate values are accepted (for example, the state abbreviations of MP (Northern Mariana Islands) and FM (Federated States of Micronesia) were rejected as invalid by the API. Are they?), and innappropriate values are rejected (such as perhaps john@gmail as an employee email, or a date_of_hire after an employees date_of_termination).
